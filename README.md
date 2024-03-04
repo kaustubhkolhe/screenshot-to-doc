@@ -22,7 +22,7 @@ pip install python-docx pyautogui pynput
 ```
 ## Usage
 
-1. **Run the Script**: Execute the Python script `screenshot_to_doc.py`.
+1. **Run the Script**: Execute the Python script `ss_to_doc.py`.
 
 2. **Document Configuration**:
    - Enter the title for the document when prompted.
