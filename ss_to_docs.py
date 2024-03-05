@@ -69,9 +69,15 @@ def exit_fun():
 
 def get_directory_name():
     global master_path, file_name, start_time
-    directory_name = input("Enter directory name: ")
-    master_path = os.path.join(current_dir, "TestingData", directory_name)
-    os.makedirs(os.path.join(master_path, "shots"))
+    while True:
+        directory_name = input("Enter directory name: ")
+        master_path = os.path.join(current_dir, "TestingData", directory_name)
+        if os.path.exists(master_path):
+            print("Folder already exists. Please choose a different name.")
+        else:
+            os.makedirs(os.path.join(master_path, "shots"))
+            break
+
     file_name = input("Enter document name: ")
     print("Press PrtSc to take the Screenshot and save to folder and To Document")
     print(f"Press {exit_combination_msg} to exit and save the document")
@@ -111,8 +117,8 @@ def capture_end_time():
     end_time = datetime.datetime.now()
     section = document.sections[0]
     header = section.header
-    header.add_paragraph(f"Total Screenshots: {img_count - 1}")
     header.add_paragraph(f"End Time: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    header.add_paragraph(f"Total Screenshots: {img_count - 1}")
 
 
 # Collect events until released
