@@ -9,13 +9,11 @@ from tkinter import messagebox
 import threading
 import psutil
 
-# Backend
+
 process_started = False  # Define process_started globally
 current_dir = os.getcwd()
 document = Document()
 screenshot_shortcut = Key.print_screen
-exit_combination_msg = 'left ctrl + space'
-exit_combination = {Key.ctrl_l, Key.space}
 default_doc_name = "testingScreenShots"
 img_count = 1
 master_path = ""
@@ -40,13 +38,8 @@ def print_start_msg(title_value, directory_name, doc_name):
 def on_press(key):
     global currently_pressed
 
-    if key in exit_combination:
-        currently_pressed.add(key)
-        if all(k in currently_pressed for k in exit_combination):
-            terminate_program()
-    else:
-        currently_pressed = set()
-        check_key(key)
+    currently_pressed = set()
+    check_key(key)
 
 
 # Function to check if the pressed key is the screenshot shortcut
@@ -96,7 +89,7 @@ def get_directory_name(directory_name, doc_name):
 
     file_name = doc_name
     print("Press PrtSc to take the Screenshot and save to folder and To Document")
-    print(f"Press {exit_combination_msg} to exit and save the document")
+
     print("_______________________")
     print("Current Directory is =>", os.getcwd())
 
@@ -215,7 +208,7 @@ def start_process():
     print("Document Title:", document_title)
     print("Directory Name:", directory_name)
     print("File Name:", file_name)
-    print_start_msg(document_title, directory_name, file_name)
+    print_start_msg(document_title, directory_name.strip(), file_name)
 
     # Start the listener on a separate thread
     listener_thread = threading.Thread(target=start_listener)
@@ -297,7 +290,7 @@ def on_closing():
 # GUI setup
 root = tk.Tk()
 root.title("Screenshot to word")
-root.geometry("400x350")
+root.geometry("450x350")
 root.resizable(False, False)
 
 ENTRY_FONT = ("System", 14)
@@ -339,7 +332,7 @@ file_name_entry.bind("<KeyRelease>", update_start_button_state)
 root.bind("<Return>", check_and_start)
 
 # Procedure note
-procedure_label = tk.Label(root, text="After clicking start, begin taking screenshots.  \npress stop to save in a word document.", font=NOTE_FONT, fg="grey")
+procedure_label = tk.Label(root, text="After clicking start, begin taking screenshots.\npress stop to save in a word document.", font=NOTE_FONT, fg="grey")
 procedure_label.grid(row=5, column=0, columnspan=2, pady=(20, 0))
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
