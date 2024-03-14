@@ -1,42 +1,48 @@
-# Screenshot to Document Automation
+# Screenshot to Word Document
 
-This Python script automates the process of taking screenshots, saving them to a specified directory, and simultaneously adding them to a Word document. 
+This Python script allows you to take screenshots and automatically save them into a Word document. It provides a simple graphical user interface (GUI) to start and stop the process.
 
-## Note
+## Requirements
 
-If you prefer to execute the code without installing Python or its dependencies, you can run the executable file (`ss_to_doc.exe`) provided in the `dist` folder.
-This executable simplifies the process by allowing you to run the script directly on your system.
+- Python 3.x
+- Libraries:
+  - `os`
+  - `datetime`
+  - `pyautogui`
+  - `docx`
+  - `pynput`
+  - `tkinter`
+  - `psutil`
 
-## Installation
+## How to Use
 
-To run this script, you'll need to have Python installed on your system along with the following dependencies:
+1. Run the script in a Python environment.
+2. Fill in the required fields in the GUI:
+   - **Document Title:** Enter the title for the Word document.
+   - **Directory Name:** Enter the name of the directory where screenshots will be saved.
+   - **File Name:** Enter the name of the Word document.
+3. Click the **Start** button to initiate the process.
+4. Begin taking screenshots by pressing the Print Screen (PrtSc) key.
+5. Press the **Stop** button to save the screenshots into the specified Word document.
+6. Screenshots will be saved both in the specified directory and embedded into the Word document.
 
-- `docx`: A Python library for creating and updating Microsoft Word (.docx) files.
-- `pyautogui`: A Python library for controlling the mouse and keyboard to automate interactions with the GUI.
-- `pynput`: A Python library for monitoring and controlling input devices such as keyboard and mouse.
+## GUI Components
 
-You can install these dependencies using pip:
+- **Document Title:** Entry field to input the title of the Word document.
+- **Directory Name:** Entry field to specify the directory where screenshots will be saved.
+- **File Name:** Entry field to provide the name of the Word document.
+- **Clear:** Button to clear all input fields.
+- **Start:** Button to start the process.
+- **Stop:** Button to stop the process and save the screenshots.
+- **Procedure Note:** Provides instructions on how to use the application.
 
-```bash
-pip install python-docx pyautogui pynput
-```
-## Usage
+## Notes
 
-1. **Run the Script**: Execute the Python script `ss_to_doc.py`.
+- Illegal characters in the directory name or file name will trigger an error message.
+- After clicking **Start**, screenshots can be taken using the Print Screen (PrtSc) key.
+- Click **Stop** to save screenshots into the Word document.
+- Closing the GUI will terminate the application.
 
-2. **Document Configuration**:
-   - Enter the title for the document when prompted.
-   - Specify the directory name where the screenshots will be saved and the document will be stored.
-   - Press the Print Screen key (`PrtSc`) to take a screenshot and save it to the specified folder and document.
-   - Press `Left Ctrl + Space` to exit the script and save the document.
+**Note:** Ensure proper permissions are set to allow screenshots and writing to the specified directory.
 
-## Output
-   - Screenshots will be saved to the specified directory (`TestingData/<directory_name>/shots`).
-   - The document will be saved as a Word file (.docx) in the specified directory (`TestingData/<directory_name>`).
-  
-   **Header Details**:
-  - **Title**: The title for the document is specified by the user when prompted to enter it.
-  - **Start Time**: The script automatically records the start time of the process and adds it to the document's header.
-  - **Total Screenshots**: The total number of screenshots taken during the process is displayed in the document's header.
-  - **End Time**: Upon exiting the script, the end time is recorded and added to the document's header.
-
+Enjoy capturing your screen content seamlessly!
