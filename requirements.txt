@@ -1,6 +1,5 @@
 pyautogui
 python-docx
 pynput
-pillow
-tk
+tkinter
 psutil
