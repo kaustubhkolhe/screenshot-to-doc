@@ -9,12 +9,10 @@ from tkinter import messagebox
 import threading
 import psutil
 
-
-process_started = False  # Define process_started globally
+process_started = False
 current_dir = os.getcwd()
 document = Document()
 screenshot_shortcut = Key.print_screen
-default_doc_name = "testingScreenShots"
 img_count = 1
 master_path = ""
 file_name = ""
@@ -22,7 +20,7 @@ currently_pressed = set()
 start_time = None
 end_time = None
 title = None
-listener = None  # Define listener globally
+listener = None
 
 
 # Function to print start message and initiate the process
@@ -67,9 +65,7 @@ def save_doc(doc_file_name):
 def exit_fun():
     global file_name
     print("<===================================>")
-    if not file_name:
-        print(f"Saving Document with default name ({default_doc_name})")
-        file_name = default_doc_name
+
     save_doc(file_name)
 
 
@@ -289,7 +285,7 @@ def on_closing():
 
 # GUI setup
 root = tk.Tk()
-root.title("Screenshot to word")
+root.title("Capture Screenshots")  # Display application name
 root.geometry("450x350")
 root.resizable(False, False)
 
@@ -332,7 +328,9 @@ file_name_entry.bind("<KeyRelease>", update_start_button_state)
 root.bind("<Return>", check_and_start)
 
 # Procedure note
-procedure_label = tk.Label(root, text="After clicking start, begin taking screenshots.\npress stop to save in a word document.", font=NOTE_FONT, fg="grey")
+procedure_label = tk.Label(root,
+                           text="After clicking start, begin taking screenshots.\npress stop to save in a word document.",
+                           font=NOTE_FONT, fg="grey")
 procedure_label.grid(row=5, column=0, columnspan=2, pady=(20, 0))
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
