@@ -1,0 +1,6 @@
+pyautogui
+python-docx
+pynput
+pillow
+tk
+psutil
