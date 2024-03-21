@@ -9,7 +9,7 @@ This Python script allows you to take screenshots and automatically save them in
   - `os`
   - `datetime`
   - `pyautogui`
-  - `docx`
+  - `python-docx`
   - `pynput`
   - `tkinter`
   - `psutil`
