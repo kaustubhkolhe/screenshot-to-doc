@@ -10,6 +10,7 @@ import threading
 import psutil
 
 process_started = False
+clear_folder = False
 current_dir = os.getcwd()
 document = Document()
 screenshot_shortcut = Key.print_screen
@@ -92,7 +93,14 @@ def get_directory_name(directory_name, doc_name):
 
 # Function to save the screenshot
 def save_img():
-    global img_count
+    global img_count, clear_folder
+
+    # Check if the flag has been set
+    if not clear_folder:
+        # Perform the operation that should happen only once (cleaning the folder)
+        clear_folder_contents()
+        clear_folder = True  # Set the flag to indicate that it has been set once
+
     shot = pyautogui.screenshot()
     path = os.path.join(master_path, "Screenshots")
     try:
@@ -107,6 +115,23 @@ def save_img():
         img_count += 1
     except Exception as e:
         print(f'Error occurred while saving screenshot: {e}')
+
+
+# Function to clear the contents of the folder
+def clear_folder_contents():
+    global master_path, file_name
+
+    path = os.path.join(master_path, "Screenshots")
+    document_folder = os.path.join(path, file_name)
+
+    if os.path.exists(document_folder):
+        for file in os.listdir(document_folder):
+            file_path = os.path.join(document_folder, file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print(f"Error clearing file {file_path}: {e}")
 
 
 # Function to capture end time and finalize the document
@@ -149,7 +174,7 @@ def capture_end_time():
 
 # Function to terminate the program
 def terminate_program():
-    global listener, document, process_started, master_path, file_name, start_time, end_time, title, img_count
+    global listener, document, process_started, master_path, file_name, start_time, end_time, title, img_count, clear_folder
 
     try:
         if listener:
@@ -163,14 +188,15 @@ def terminate_program():
             print(f"Error occurred during termination: {e}")
 
         # Reset all global variables
-        document = Document()  # Reset document to default
-        process_started = False  # Reset process_started to default
-        master_path = ""  # Reset master_path to default
-        file_name = ""  # Reset file_name to default
-        start_time = None  # Reset start_time to default
-        end_time = None  # Reset end_time to default
-        title = None  # Reset title to default
-        img_count = 1  # Reset img_count to default
+        document = Document()
+        clear_folder = False
+        process_started = False
+        master_path = ""
+        file_name = ""
+        start_time = None
+        end_time = None
+        title = None
+        img_count = 1
 
         exit()
 
@@ -221,7 +247,7 @@ def start_process():
 
 # Function to stop the process
 def stop_process():
-    global process_started, start_button
+    global process_started, start_button, clear_folder
     print("Process Stopped")
 
     # Start the termination process on a separate thread
@@ -231,6 +257,7 @@ def stop_process():
     start_button.config(state=tk.NORMAL)
     stop_button.config(state=tk.DISABLED)
     process_started = False
+
     doc_title_entry.config(state=tk.NORMAL)
     dir_name_entry.config(state=tk.NORMAL)
     file_name_entry.config(state=tk.NORMAL)
