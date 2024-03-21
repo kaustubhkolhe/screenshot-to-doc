@@ -191,8 +191,8 @@ def start_listener():
 def start_process():
     global process_started, file_name, start_button
     document_title = doc_title_entry.get()
-    directory_name = dir_name_entry.get()
-    file_name = file_name_entry.get()
+    directory_name = dir_name_entry.get().strip()
+    file_name = file_name_entry.get().strip()
 
     if not validate_directory_name(directory_name):
         messagebox.showerror("Error", "Illegal character in directory name")
@@ -204,7 +204,7 @@ def start_process():
     print("Document Title:", document_title)
     print("Directory Name:", directory_name)
     print("File Name:", file_name)
-    print_start_msg(document_title, directory_name.strip(), file_name)
+    print_start_msg(document_title, directory_name, file_name)
 
     # Start the listener on a separate thread
     listener_thread = threading.Thread(target=start_listener)
@@ -325,6 +325,7 @@ doc_title_entry.bind("<KeyRelease>", update_start_button_state)
 dir_name_entry.bind("<KeyRelease>", update_start_button_state)
 file_name_entry.bind("<KeyRelease>", update_start_button_state)
 
+# Alternate way to start by pressing enter key
 root.bind("<Return>", check_and_start)
 
 # Procedure note
