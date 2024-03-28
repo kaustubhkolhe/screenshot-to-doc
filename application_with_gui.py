@@ -9,6 +9,7 @@ from tkinter import messagebox
 import threading
 import psutil
 
+# Global variables initialization
 process_started = False
 clear_folder = False
 current_dir = os.getcwd()
@@ -16,6 +17,7 @@ document = Document()
 screenshot_shortcut = Key.print_screen
 img_count = 1
 master_path = ""
+directory_name = ""
 file_name = ""
 currently_pressed = set()
 start_time = None
@@ -174,7 +176,7 @@ def capture_end_time():
 
 # Function to terminate the program
 def terminate_program():
-    global listener, document, process_started, master_path, file_name, start_time, end_time, title, img_count, clear_folder
+    global listener, document, process_started, master_path, directory_name, file_name, start_time, end_time, title, img_count, clear_folder
 
     try:
         if listener:
@@ -193,6 +195,7 @@ def terminate_program():
         process_started = False
         master_path = ""
         file_name = ""
+        directory_name = ""
         start_time = None
         end_time = None
         title = None
@@ -215,15 +218,16 @@ def start_listener():
 
 # Front end started
 def start_process():
-    global process_started, file_name, start_button
+    global process_started, file_name, directory_name, start_button
+
     document_title = doc_title_entry.get()
     directory_name = dir_name_entry.get().strip()
-    file_name = file_name_entry.get().strip()
+    file_name = file_name_entry.get().strip()  # Update file_name with the value from the entry widget
 
-    if not validate_directory_name(directory_name):
+    if not validate_name(directory_name):
         messagebox.showerror("Error", "Illegal character in directory name")
         return
-    if not validate_file_name(file_name):
+    if not validate_name(file_name):
         messagebox.showerror("Error", "Illegal character in file name")
         return
 
@@ -245,10 +249,35 @@ def start_process():
     clear_button.config(state=tk.DISABLED)
 
 
+# Function to check if Word file with given file_name is opened
+def check_word_file_open(file_path):
+    try:
+        file_path = os.path.abspath(file_path)
+        for process in psutil.process_iter(['pid', 'name']):
+            try:
+                if process.name() == 'WINWORD.EXE':
+                    p = psutil.Process(process.pid)
+                    for file_handle in p.open_files():
+                        if file_handle.path == file_path:
+                            return True # Return True if match found
+            except (psutil.AccessDenied, psutil.NoSuchProcess):
+                pass
+        return False  # Return False if no match found after checking all processes
+    except Exception as e:
+        print("An error occurred:", e)
+        return False
+
+
 # Function to stop the process
 def stop_process():
     global process_started, start_button, clear_folder
     print("Process Stopped")
+
+    file_path = os.path.join(master_path, f"{file_name}.docx")  # Construct the file path
+    if check_word_file_open(file_path):
+        messagebox.showinfo(f"{file_name} Opened",
+                            f"The Word file {file_name} is already opened. Please close it before proceeding.")
+        return
 
     # Start the termination process on a separate thread
     stop_thread = threading.Thread(target=terminate_program)
@@ -264,16 +293,10 @@ def stop_process():
     clear_button.config(state=tk.NORMAL)
 
 
-# Function to validate directory name
-def validate_directory_name(directory_name):
-    invalid_chars = set('/\\?%*:|"<>')
-    return not any(char in invalid_chars for char in directory_name)
-
-
 # Function to validate file name
-def validate_file_name(file_name):
+def validate_name(name):
     invalid_chars = set('/\\?%*:|"<>')
-    return not any(char in invalid_chars for char in file_name)
+    return not any(char in invalid_chars for char in name)
 
 
 # Function to clear entries in GUI
